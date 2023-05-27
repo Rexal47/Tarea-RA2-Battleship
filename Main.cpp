@@ -34,10 +34,18 @@
 //}
 
 int main(){
+	srand(time(NULL));
 	Tablero cpu, jugador;
+//	cpu.Imprimir(true);
+//	cpu.Imprimir(false);
 	
-	cpu.Imprimir(true);
-	jugador.Imprimir(false);
-	
+	while(!cpu.ganar(true)){
+		cpu.Imprimir(false);
+		cpu.disparo(true);
+	}
+	//cpu.Imprimir(true);
+	cpu.Imprimir(false);
+//	jugador.Imprimir(true);
+//	jugador.Imprimir(false);
 	
 }

@@ -111,23 +111,15 @@ class Tablero{
 	}
 	
 	//return:
-	// 0 indica que disparo fuera de los limites, 
-	// 1  indica que disparo correctamente, 
-	// -1  indica que ya habia disparado a esa posicion 
-	int disparo(int x, int y, bool jugador){ 
-		//Comprueba que el disparo esta dentro de los margenes del tablero
-    	if(x<1 || x>15 || y<2 || y>16){
-    		printf("Has disparado en una posicion equivocada.\n");
-    		return 0;
-		} 
-    	
-    	//Comprueba que no ha tirado a dicha posicion
-    	if(tRespuestas[x][y]== 'X') {
-    		printf("Ya has tirado a esta posicion.\n");
-    		return -1;
-		}
+	// True  indica que disparo correctamente, 
+	// False indica que disparo incorrectamente
+	bool calcularDisparo(int x, int y, bool jugador){ 
+		
 		//Creamos un auxiliar para facilitar el entendimiento del codigo
     	char aux=tRespuestas[x][y];
+    	string nombrePlayer;
+    	if(jugador) nombrePlayer="Jugador";
+    	else nombrePlayer= "CPU";
     	
     	if(tRespuestas[x][y]!=' ') {
 			//Ve si le ha dado a un portaaviones o una lancha
@@ -135,13 +127,13 @@ class Tablero{
 				if(aux=='P'){
 					portaaviones--;
 					if(portaaviones>0) {
-						printf("Le has dado a un portaavion.\n");
+						cout <<nombrePlayer <<" le ha dado a un portaavion.\n";
 					}else{
-						printf("Has hundido un portaavion.\n");
+						cout <<nombrePlayer <<" ha hundido un portaavion.\n";
 					}
 				}else{
 					lancha--;
-					printf("Has hundido una lancha.\n");
+					cout <<nombrePlayer <<" ha hundido una lancha.\n";
 				}
 				tVisible[x][y]=aux;
 			}else{
@@ -150,16 +142,16 @@ class Tablero{
 					if(aux=='B'){
 						buque1--;
 						if(buque1>0) {
-							printf("Le has dado a un buque (1).\n");
+								cout <<nombrePlayer <<" le ha dado a un buque (1).\n";
 						}else{
-							printf("Has hundido un buque (1).\n");
+							cout <<nombrePlayer <<" ha hundido un buque (1).\n";
 						}
 					}else{
 						buque2--;
 						if(buque2>0) {
-							printf("Le has dado a un buque (2).\n");
+							cout <<nombrePlayer <<" le ha dado a un buque (2).\n";
 						}else{
-							printf("Has hundido un buque (2).\n");
+							cout <<nombrePlayer <<" ha hundido un buque (2).\n";
 						}
 					}
 					tVisible[x][y]='B';
@@ -168,16 +160,16 @@ class Tablero{
 					if(aux=='S'){
 						submarino1--;
 						if(submarino1>0) {
-							printf("Le has dado a un submarino (1).\n");
+							cout <<nombrePlayer <<" le ha dado a un submarino (1).\n";
 						}else{
-							printf("Has hundido un submarino (1).\n");
+							cout <<nombrePlayer <<" ha hundido un submarino (1).\n";
 						}
 					}else{
 						submarino2--;
 						if(submarino2>0) {
-							printf("Le has dado a un submarino (2).\n");
+							cout <<nombrePlayer <<" le ha dado a un submarino (2).\n";
 						}else{
-							printf("Has hundido un submarino (2).\n");
+							cout <<nombrePlayer <<" ha hundido un submarino (2).\n";
 						}
 					}
 					tVisible[x][y]='S';
@@ -185,10 +177,10 @@ class Tablero{
 			}		
     	}else{
     		tVisible[x][y]='X';
-    		printf("Disparo fallido.\n");
+    		cout <<nombrePlayer <<" ha fallado el disparo.\n";
 		}
     	tRespuestas[x][y]='X';	
-    	return 1;
+    	return true;
   }
 	
 	//imprime en pantalla: False tablero con respuestas, T tablero jugador
@@ -207,6 +199,142 @@ class Tablero{
 		printf("        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15\n\n");
 //		system("pause");
  	}
+ 	
+ 	//Manda el mensaje del ganador (True->Gana jugador, False->Gana CPU)
+ 	bool ganar(bool jugador){
+ 		if (portaaviones==0 && buque1 ==0 && buque2 == 0 && submarino1 ==0 && submarino2==0 && lancha==0){
+ 			if(jugador) printf("\nFELICIDADES JUGADOR, HAS GANADO.\n");
+ 			else printf("\nLAMENTABLEMENTE JUGADOR, HAS PERDIDO.\n");
+ 			return true;
+		 }
+		return false;
+	 }
+ 	
+ 	bool disparo(bool user){
+	
+		bool flag=true;
+		int x,y;
+		if(user){
+			string coord;
+			//leemos y validamos la coordenada
+			while(flag){
+				flag=false;
+				printf("Ingresa coordenada (ejemplo: A-1 o A,1 ): ");
+				//leemos la coordenada
+				getline(cin,coord);
+				//validamos que no exceda el limite de caracteres
+				if(coord.length()<3 || coord.length()>4) {
+					printf("Por favor, sigue el formato Letra-Numero (A-1) o Letra,Numero (A,1).\n");
+					flag=true;	
+				}else{
+					//Transformamos la letra a numero, si no esta entre la letra A y O, responde -1
+					x=idLetra(toupper(coord[0]));
+					if(x==-1) {
+						printf("Letra fuera del rango.\n");
+						flag=true;	
+					}else{
+						//Revisa si se dividio el numero con el formato indicado
+						if(coord[1]!=',' && coord[1]!='-') {
+							printf("Recuerda dividir las coordenadas con '-' o ',' \n");
+							flag = true;	
+						}else{
+							//revisa si despues de la "-" o ",", sigue un numero o un par de numeros
+							if(!isdigit(coord[2]) || (coord.length()==4 && !isdigit(coord[3]))) {
+								printf("Revisa si ingresaste un numero valido.\n");
+								flag = true;	
+							}else{
+								if(coord.length()==3){
+									y=atoi(coord.substr(2,1).c_str())+1;
+								}else{
+									y= atoi(coord.substr(2,2).c_str())+1;
+								}
+								//Comprueba que el disparo esta dentro de los margenes del tablero (x se valido anteriormente)
+						    	if(y<2 || y>16){
+						    		printf("Revisa si ingresaste una coordenada valida.\n");
+						    		flag = true;
+								}else{
+									//Comprueba que no ha tirado a dicha posicion
+									if(tRespuestas[x][y]== 'X'){
+						    			printf("Ya has tirado a esta posicion.\n");
+						    			flag = true;
+									}
+								}
+							}	
+						}
+					}
+				}
+			}
+			return calcularDisparo(x,y,true);
+		}else{
+			//En caso de ser CPU, simplemente dispara a una posición al azar
+			while(flag){
+				flag=false;
+				x= 1 + rand()%15;
+				y= 2 + rand()%15;
+				//Valida que no haya disparado a esa posición
+				if(tRespuestas[x][y]== 'X'){
+	    			flag = true;
+				}
+			}
+			return calcularDisparo(x,y,false);
+		}
+		
+	}
+
+	int idLetra(char letra){
+		int numero=0;
+		switch (letra){
+			case 'A':
+				numero=1;
+				break;
+			case 'B':
+				numero=2;
+				break;
+			case 'C':
+				numero=3;
+				break;
+			case 'D':
+				numero=4;
+				break;
+			case 'E':
+				numero=5;
+				break;
+			case 'F':
+				numero=6;
+				break;
+			case 'G':
+				numero=7;
+				break;
+			case 'H':
+				numero=8;
+				break;
+			case 'I':
+				numero=9;
+				break;
+			case 'J':
+				numero=10;
+				break;
+			case 'K':
+				numero=11;
+				break;
+			case 'L':
+				numero=12;
+				break;
+			case 'M':
+				numero=13;
+				break;
+			case 'N':
+				numero=14;
+				break;
+			case 'O':
+				numero=15;
+				break;
+			default:
+				numero=-1;
+				break;
+		}
+		return numero;
+	}
  	
 	Tablero();
 };
@@ -233,100 +361,10 @@ Tablero::Tablero(){
 	lancha = 3; 
 }
 
-int devolverNumero(char letra);
-
-//int main(){
-//	//Variable para crear el azar
-//	srand(time(NULL));
-////	for(int i=0;i<100;i++) dale(rand()%10);
-//	Tablero tablita;
-//	char x[1];
-//	int fila, columna;
-//	
-//	int i=0;
-//	while(i<5){
-//		
-//		tablita.Imprimir(true);
-//		tablita.Imprimir(false);
-//		
-//		printf("Ingresa Fila: ");
-//		scanf("%s",x);
-//		printf("Ingresa Columna: ");
-//		scanf("%d",&columna);
-//		
-//		fila = devolverNumero(x[0]);
-////		y = atoi(cord.substr(2,1).c_str()) +1;
-//		
-//		//printf("Coordenadas: %d - %d\n",fila,columna+1);
-//		
-//		tablita.disparo(fila,columna+1);
-//		i++;
-//	}
-//	
-//	
-//	return 0;
-//}
-
-int devolverNumero(char letra){
-	
-	int numero=0;
-	switch (letra){
-		case 'A':
-			numero=1;
-			break;
-		case 'B':
-			numero=2;
-			break;
-		case 'C':
-			numero=3;
-			break;
-		case 'D':
-			numero=4;
-			break;
-		case 'E':
-			numero=5;
-			break;
-		case 'F':
-			numero=6;
-			break;
-		case 'G':
-			numero=7;
-			break;
-		case 'H':
-			numero=8;
-			break;
-		case 'I':
-			numero=9;
-			break;
-		case 'J':
-			numero=10;
-			break;
-		case 'K':
-			numero=11;
-			break;
-		case 'L':
-			numero=12;
-			break;
-		case 'M':
-			numero=13;
-			break;
-		case 'N':
-			numero=14;
-			break;
-		case 'O':
-			numero=15;
-			break;
-		default:
-			numero=100;
-			break;
-	}
-	return numero;
-}
 
 #endif
 
 /*Falta -> f(x) ganar
 si es disparo CPU, no mostrar print? o mostrar quien dispara
-validar disparos (dividir por - en letra y número) = letra no leida error/letra leida buena / numero weno, numero malo, f(x) valida :)
 
 */

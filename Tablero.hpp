@@ -210,6 +210,7 @@ class Tablero{
 		return false;
 	 }
  	
+ 	//Genera el disparo para el caso del CPU o lee el disparo y lo valida para el jugador
  	bool disparo(bool user){
 	
 		bool flag=true;
@@ -281,6 +282,7 @@ class Tablero{
 		
 	}
 
+	//Retorna el valor numerico de la letra
 	int idLetra(char letra){
 		int numero=0;
 		switch (letra){
@@ -363,8 +365,3 @@ Tablero::Tablero(){
 
 
 #endif
-
-/*Falta -> f(x) ganar
-si es disparo CPU, no mostrar print? o mostrar quien dispara
-
-*/

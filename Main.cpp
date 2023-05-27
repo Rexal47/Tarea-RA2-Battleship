@@ -39,9 +39,9 @@ int main(){
 //	cpu.Imprimir(true);
 //	cpu.Imprimir(false);
 	
-	while(!cpu.ganar(true)){
+	while(!cpu.ganar(false)){
 		cpu.Imprimir(false);
-		cpu.disparo(true);
+		cpu.disparo(false);
 	}
 	//cpu.Imprimir(true);
 	cpu.Imprimir(false);

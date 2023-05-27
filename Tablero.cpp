@@ -31,7 +31,7 @@ class Tablero{
 	bool crearNave(int l, char tipo, int x,int y, int dir){
 		
 		//Dir: 0 Norte, 1 Sur, 2 Oeste, 3 Este
-		//Comprueba que el barco cae en la posición
+		//Comprueba que el barco cae en la posiciï¿½n
 		if(dir<2){
 			if(dir==0 && x-l<0) {
 				return false;
@@ -100,17 +100,14 @@ class Tablero{
 			printf("\n");
 		}
 		printf("        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15\n\n");
-		system("pause");
+//		system("pause");
  	}
  	
 	Tablero();
 };
 
 Tablero::Tablero(){
-	
-	//Variable para crear el azar
-	srand(time(NULL));
-	
+
 	// crearNave(largo del barco, caracter del barco, eje X, eje Y, direccion del barco)
 	while(!crearNave(5,'P',1+ rand()%15, 2+ rand()%15,rand()%4));
 //    Imprimir();
@@ -127,7 +124,7 @@ Tablero::Tablero(){
     while(!crearNave(1,'L',1+ rand()%15, 2+ rand()%15,rand()%4));
 //    Imprimir();
     while(!crearNave(1,'L',1+ rand()%15, 2+ rand()%15,rand()%4));
-    Imprimir();
+//    Imprimir();
     
     portaaviones = 5; 
 	buque1 = 4;
@@ -142,7 +139,8 @@ Tablero::Tablero(){
 void dale(int a);
 
 int main(){
-//	srand(time(NULL));
+	//Variable para crear el azar
+	srand(time(NULL));
 //	for(int i=0;i<100;i++) dale(rand()%10);
 	Tablero tablita[100];
 	

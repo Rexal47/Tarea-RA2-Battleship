@@ -14,7 +14,7 @@
 #include <semaphore.h>
 
 #define PUERTO 4747
-#define IP "172.28.61.242"
+#define IP "192.168.1.120"
 
 using namespace std;
 
@@ -44,7 +44,6 @@ class Client{
     void Conectar(){
         //inicializar socket
         conexion = connect(net_socket,(struct sockaddr*)&direccion_server,sizeof(direccion_server));
-    
         //revisar error de conexion
         if(conexion < 0){
             cout << "ERROR EN LA CONEXION" << endl;
@@ -234,10 +233,8 @@ int main(){
     
     srand(time(NULL));
     Client cliente;
-
-    //cliente.CrearSocket();
-    //cliente.Conectar();
-
+    cliente.CrearSocket();
+    cliente.Conectar();
     //Recibe tableros de disparos y con sus barcos
     //cliente.Recibir();
     //cliente.FormatearTableros();

@@ -94,6 +94,8 @@ class Server{
     }
 };
 
+void juego();
+
 int main(){
 
     srand(time(NULL));
@@ -114,4 +116,51 @@ int main(){
     
     servidor.CerrarSocket();
     return 0;
+}
+
+void juego(){
+
+    //Indica si es el turno del jugador
+    bool turnoPlayer;
+    //Crea los tableros de cada jugador
+    Tablero cpu, player;
+    //Si es 0 empieza servidor, si es 1, jugador
+    if(rand()%2==1){
+        turnoPlayer = true;
+    }else{
+        turnoPlayer = false;
+    }
+    //X e Y son las posiciones donde se disparara
+    int x=0,y=0;
+    /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
+
+    //Seguira el juego mientras ninguno gane
+    while (!cpu.ganar(true) && !player.ganar(false))
+    {
+        if(turnoPlayer){
+            /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
+            /*ACA RECIBIR X E Y*/
+            string coord;
+
+            x=atoi(coord.substr(0,2).c_str());
+            y=atoi(coord.substr(2,2).c_str())+1;
+
+            cpu.calcularDisparo(x,y,true);
+        }else{
+            /*ENVIAR MENSAJE DE QUE ES TURNO DEL CPU + [!]*/
+
+            //Genera un disparo en X,Y
+            x= 1 + rand()%15;
+			y= 2 + rand()%15;
+            while (player.tRespuestas[x][y]=='X')
+            {
+                x= 1 + rand()%15;
+			    y= 2 + rand()%15;
+            }
+            player.calcularDisparo(x,y,false);
+        }
+
+        /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
+    }
+    
 }

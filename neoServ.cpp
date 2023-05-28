@@ -123,13 +123,13 @@ class Server{
     //Si es 0 empieza servidor, si es 1, jugador
     if(rand()%2==1){
         turnoPlayer = true;
+        Enviar(player, cpu);
     }else{
         turnoPlayer = false;
     }
     //X e Y son las posiciones donde se disparara
     int x=0,y=0;
     cout << "e llegao";
-    Enviar(player, cpu);
 
     /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
 
@@ -139,8 +139,8 @@ class Server{
         if(turnoPlayer){
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
             /*ACA RECIBIR X E Y*/
-
-            string coord = "1010";
+            Recibir();
+            string coord = buffer;
 
             x=atoi(coord.substr(0,2).c_str());
             y=atoi(coord.substr(2,2).c_str())+1;
@@ -165,6 +165,7 @@ class Server{
         }
 
         /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
+        Enviar(player, cpu);
     }
     
 }

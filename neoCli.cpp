@@ -14,7 +14,7 @@
 #include <semaphore.h>
 
 #define PUERTO 4747
-#define IP "192.168.1.120"
+#define IP "172.28.61.242"
 
 using namespace std;
 
@@ -52,21 +52,9 @@ class Client{
         cout << "CONEXION EXITOSA" << endl;
     }
 
-    void Enviar(){
-        //Formateo de mensaje
-        // mensaje.clear();
-        // for (int i = 0; i < 17; i++)
-        // {   
-        //     for (int j = 0; j < 18; j++)
-        //     {
-        //         temp = player.tVisible[i][j];
-        //         mensaje.append(temp);
-        //     }
-        // }
-        
-        // cout  << mensaje << endl;
-        // const char* mensaje_char = mensaje.c_str();
-        // send(net_socket, mensaje_char, mensaje.length(), 0);
+    void EnviarCoord(string coordenada){
+        const char* mensaje_char = coordenada.c_str();
+        send(net_socket, mensaje_char, coordenada.length(), 0);
     }
 
     void Recibir(){
@@ -168,6 +156,7 @@ class Client{
         }else{
             coordenadas = coordenadas + std::to_string(y);
         }
+        EnviarCoord(coord);
     }
 
     //Retorna el valor numerico de la letra
@@ -236,21 +225,20 @@ int main(){
     cliente.CrearSocket();
     cliente.Conectar();
     //Recibe tableros de disparos y con sus barcos
-    //cliente.Recibir();
-    //cliente.FormatearTableros();
 
-    //cliente.InputTablero();
-    cliente.Recibir();
-    cout << cliente.buffer << endl;
-    cout << cliente.coordenadas << endl;
-
-    //Recibe tableros de disparos y con sus barcos
-    //cliente.Recibir();
-    //cliente.FormatearTableros();
-
-    //cliente.InputTablero();
     cliente.Recibir();
     cliente.FormatearTableros();
+    while (1)
+    {
+        cliente.InputTablero();
+        cliente.Recibir();
+        cliente.FormatearTableros();
+
+    }
+    
+    cliente.FormatearTableros();
+    cliente.InputTablero();
+
 
     //Game Loop
     // while (1)

@@ -85,9 +85,7 @@ class Server{
                 mensaje.append("000000");
             } 
         }
-        
-        
-        
+
         const char* mensaje_char = mensaje.c_str();
         send(new_socket, mensaje_char, mensaje.length(), 0);
     }
@@ -132,6 +130,7 @@ class Server{
     int x=0,y=0;
     cout << "e llegao";
     Enviar(player, cpu);
+
     /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
 
     //Seguira el juego mientras ninguno gane
@@ -140,12 +139,15 @@ class Server{
         if(turnoPlayer){
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
             /*ACA RECIBIR X E Y*/
-            string coord;
+
+            string coord = "1010";
 
             x=atoi(coord.substr(0,2).c_str());
             y=atoi(coord.substr(2,2).c_str())+1;
 
             cpu.calcularDisparo(x,y,true);
+            turnoPlayer = false;
+          
         }else{
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL CPU + [!]*/
 
@@ -158,6 +160,8 @@ class Server{
 			    y= 2 + rand()%15;
             }
             player.calcularDisparo(x,y,false);
+
+            turnoPlayer = true;
         }
 
         /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/

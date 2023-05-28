@@ -23,11 +23,12 @@ class Client{
     std::string mensaje, temp;
     struct sockaddr_in direccion_server;
     int net_socket, conexion, valread, i, j, k, x, y;
-    char buffer[8192] = { 0 };
+    
     char tDisparos[17][18];
     char tJugador[17][18];
 
     public:
+    char buffer[8192] = { 0 };
     std::string coordenadas;
     Tablero tablero;
     void CrearSocket(){
@@ -240,7 +241,10 @@ int main(){
     //Recibe tableros de disparos y con sus barcos
     //cliente.Recibir();
     //cliente.FormatearTableros();
-    cliente.InputTablero();
+
+    //cliente.InputTablero();
+    cliente.Recibir();
+    cout << cliente.buffer << endl;
     cout << cliente.coordenadas << endl;
 
     //Game Loop

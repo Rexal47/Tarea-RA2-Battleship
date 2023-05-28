@@ -11,6 +11,7 @@ using namespace std;
 
 class Tablero{
 
+	public:
 	//Tablero con las posiciones de los barcos
 	char tRespuestas[17][18]={{' ','X','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','X'}, 
 					{'A','|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
@@ -29,8 +30,7 @@ class Tablero{
 					{'N','|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
 					{'O','|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
 					{' ','X','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','X'}};
-					
-	public:
+
 	//Tablero visible por el jugador
 	char tVisible[17][18]={{' ','X','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','X'}, 
 					{'A','|','~','~','~','~','~','~','~','~','~','~','~','~','~','~','~','|'},
@@ -112,10 +112,8 @@ class Tablero{
 		return true;
 	}
 	
-	//return:
-	// True  indica que disparo correctamente, 
-	// False indica que disparo incorrectamente
-	bool calcularDisparo(int x, int y, bool jugador){ 
+	//Ejecuta el disparo
+	void calcularDisparo(int x, int y, bool jugador){ 
 		
 		//Creamos un auxiliar para facilitar el entendimiento del codigo
     	char aux=tRespuestas[x][y];
@@ -182,7 +180,6 @@ class Tablero{
     		cout <<nombrePlayer <<" ha fallado el disparo.\n";
 		}
     	tRespuestas[x][y]='X';	
-    	return true;
   }
 	
 	//imprime en pantalla: False tablero con respuestas, T tablero jugador
@@ -205,140 +202,12 @@ class Tablero{
  	//Manda el mensaje del ganador (True->Gana jugador, False->Gana CPU)
  	bool ganar(bool jugador){
  		if (portaaviones==0 && buque1 ==0 && buque2 == 0 && submarino1 ==0 && submarino2==0 && lancha==0){
- 			if(jugador) printf("\nFELICIDADES JUGADOR, HAS GANADO.\n");
- 			else printf("\nLAMENTABLEMENTE JUGADOR, HAS PERDIDO.\n");
+ 			if(jugador) printf("\nHA GANADO UN JUGADOR.\n");
+ 			else printf("\nHA PERDIDO UN JUGADOR.\n");
  			return true;
 		 }
 		return false;
 	 }
- 	
- 	//Genera el disparo para el caso del CPU o lee el disparo y lo valida para el jugador
- 	bool disparo(bool user){
-	
-		bool flag=true;
-		int x,y;
-		if(user){
-			string coord;
-			//leemos y validamos la coordenada
-			while(flag){
-				flag=false;
-				printf("Ingresa coordenada (ejemplo: A-1 o A,1 ): ");
-				//leemos la coordenada
-				getline(cin,coord);
-				//validamos que no exceda el limite de caracteres
-				if(coord.length()<3 || coord.length()>4) {
-					printf("Por favor, sigue el formato Letra-Numero (A-1) o Letra,Numero (A,1).\n");
-					flag=true;	
-				}else{
-					//Transformamos la letra a numero, si no esta entre la letra A y O, responde -1
-					x=idLetra(toupper(coord[0]));
-					if(x==-1) {
-						printf("Letra fuera del rango.\n");
-						flag=true;	
-					}else{
-						//Revisa si se dividio el numero con el formato indicado
-						if(coord[1]!=',' && coord[1]!='-') {
-							printf("Recuerda dividir las coordenadas con '-' o ',' \n");
-							flag = true;	
-						}else{
-							//revisa si despues de la "-" o ",", sigue un numero o un par de numeros
-							if(!isdigit(coord[2]) || (coord.length()==4 && !isdigit(coord[3]))) {
-								printf("Revisa si ingresaste un numero valido.\n");
-								flag = true;	
-							}else{
-								if(coord.length()==3){
-									y=atoi(coord.substr(2,1).c_str())+1;
-								}else{
-									y= atoi(coord.substr(2,2).c_str())+1;
-								}
-								//Comprueba que el disparo esta dentro de los margenes del tablero (x se valido anteriormente)
-						    	if(y<2 || y>16){
-						    		printf("Revisa si ingresaste una coordenada valida.\n");
-						    		flag = true;
-								}else{
-									//Comprueba que no ha tirado a dicha posicion
-									if(tRespuestas[x][y]== 'X'){
-						    			printf("Ya has tirado a esta posicion.\n");
-						    			flag = true;
-									}
-								}
-							}	
-						}
-					}
-				}
-			}
-			return calcularDisparo(x,y,true);
-		}else{
-			//En caso de ser CPU, simplemente dispara a una posici�n al azar
-			while(flag){
-				flag=false;
-				x= 1 + rand()%15;
-				y= 2 + rand()%15;
-				//Valida que no haya disparado a esa posici�n
-				if(tRespuestas[x][y]== 'X'){
-	    			flag = true;
-				}
-			}
-			return calcularDisparo(x,y,false);
-		}
-		
-	}
-
-	//Retorna el valor numerico de la letra
-	int idLetra(char letra){
-		int numero=0;
-		switch (letra){
-			case 'A':
-				numero=1;
-				break;
-			case 'B':
-				numero=2;
-				break;
-			case 'C':
-				numero=3;
-				break;
-			case 'D':
-				numero=4;
-				break;
-			case 'E':
-				numero=5;
-				break;
-			case 'F':
-				numero=6;
-				break;
-			case 'G':
-				numero=7;
-				break;
-			case 'H':
-				numero=8;
-				break;
-			case 'I':
-				numero=9;
-				break;
-			case 'J':
-				numero=10;
-				break;
-			case 'K':
-				numero=11;
-				break;
-			case 'L':
-				numero=12;
-				break;
-			case 'M':
-				numero=13;
-				break;
-			case 'N':
-				numero=14;
-				break;
-			case 'O':
-				numero=15;
-				break;
-			default:
-				numero=-1;
-				break;
-		}
-		return numero;
-	}
  	
 	Tablero();
 };

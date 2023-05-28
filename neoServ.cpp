@@ -52,7 +52,7 @@ class Server{
         }
     }
 
-    void Enviar(Tablero jug, Tablero srv){
+    void Enviar(Tablero jug, Tablero srv, bool turnoJugador){
         //Formateo de mensaje
         mensaje.clear();
         //tviSible tjugaodr win+quiengana
@@ -82,7 +82,12 @@ class Server{
             if(jug.ganar(false) == true){
                 mensaje.append("winjug");
             }else{
-                mensaje.append("000000");
+                if(turnoJugador){
+                    mensaje.append("111111");
+                }else{
+                    mensaje.append("000000");
+                }
+                
             } 
         }
 
@@ -123,7 +128,7 @@ class Server{
     //Si es 0 empieza servidor, si es 1, jugador
     if(rand()%2==1){
         turnoPlayer = true;
-        Enviar(player, cpu);
+        Enviar(player, cpu, true);
     }else{
         turnoPlayer = false;
     }
@@ -165,9 +170,9 @@ class Server{
         }
 
         /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
-        Enviar(player, cpu);
+        Enviar(player, cpu, turnoPlayer);
     }
-    
+
 }
 };
 

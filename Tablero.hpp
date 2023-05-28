@@ -269,12 +269,12 @@ class Tablero{
 			}
 			return calcularDisparo(x,y,true);
 		}else{
-			//En caso de ser CPU, simplemente dispara a una posici�n al azar
+			//En caso de ser CPU, simplemente dispara a una posicion al azar
 			while(flag){
 				flag=false;
 				x= 1 + rand()%15;
 				y= 2 + rand()%15;
-				//Valida que no haya disparado a esa posici�n
+				//Valida que no haya disparado a esa posicion
 				if(tRespuestas[x][y]== 'X'){
 	    			flag = true;
 				}

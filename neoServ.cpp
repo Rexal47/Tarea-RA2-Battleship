@@ -28,7 +28,6 @@ class Server{
     struct sockaddr_storage serverStorage;
     socklen_t addr_size;
     char buffer[8192] = { 0 };
-    Tablero cpu;
 
     public:
     void CrearSocket(){
@@ -53,16 +52,39 @@ class Server{
         }
     }
 
-    void Enviar(){
+    void Enviar(Tablero jug, Tablero srv){
         //Formateo de mensaje
         mensaje.clear();
+        //tviSible tjugaodr win+quiengana
+
         for (int i = 0; i < 17; i++)
         {   
             for (int j = 0; j < 18; j++)
             {
-                temp = cpu.tVisible[i][j];
+                temp = srv.tVisible[i][j];
                 mensaje.append(temp);
             }
+        }
+
+        for (int i = 0; i < 17; i++)
+        {   
+            for (int j = 0; j < 18; j++)
+            {
+
+                temp = jug.tRespuestas[i][j];
+                mensaje.append(temp);
+            }
+        }
+
+        //Si el server gana por un jugador que es true, retorna true
+        if(srv.ganar(true) == true){
+            mensaje.append("winsrv");
+        } else{
+            if(jug.ganar(false) == true){
+                mensaje.append("winjug");
+            }else{
+                mensaje.append("000000");
+            } 
         }
         
         const char* mensaje_char = mensaje.c_str();
@@ -92,33 +114,8 @@ class Server{
         close(new_socket);
         shutdown(server_socket, SHUT_RDWR);
     }
-};
 
-void juego();
-
-int main(){
-
-    srand(time(NULL));
-    Server servidor;
-
-    servidor.CrearSocket();
-
-    //Game Loop
-    while (1)
-    {
-        //server indica que es el turno del cliente para disparar
-        //cliente indica coordenadas, las envia
-        //server recibe coordenadas y envia tablero con resultados
-        //cliente indica que es el turno del server para disparar
-        //server indica coordenadas, las envia
-        //cliente recibe coordenadas y envia tablero con resultados
-    }
-    
-    servidor.CerrarSocket();
-    return 0;
-}
-
-void juego(){
+    void juego(){
 
     //Indica si es el turno del jugador
     bool turnoPlayer;
@@ -132,6 +129,9 @@ void juego(){
     }
     //X e Y son las posiciones donde se disparara
     int x=0,y=0;
+    cout << "e llegao";
+    Enviar(player, cpu);
+
     /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
 
     //Seguira el juego mientras ninguno gane
@@ -164,3 +164,27 @@ void juego(){
     }
     
 }
+};
+
+int main(){
+
+    srand(time(NULL));
+    Server servidor;
+
+    servidor.CrearSocket();
+
+    servidor.juego();
+
+    //Game Loop
+    while (1)
+    {
+        //server indica que es el turno del cliente para disparar
+        //cliente indica coordenadas, las envia
+        //server recibe coordenadas y envia tablero con resultados
+        //cliente indica que es el turno del server para disparar
+        //server indica coordenadas, las envia
+        //cliente recibe coordenadas y envia tablero con resultados
+    }
+    
+    servidor.CerrarSocket();
+    return 0;

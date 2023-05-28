@@ -70,6 +70,7 @@ class Server{
         {   
             for (int j = 0; j < 18; j++)
             {
+
                 temp = jug.tRespuestas[i][j];
                 mensaje.append(temp);
             }
@@ -85,8 +86,6 @@ class Server{
                 mensaje.append("000000");
             } 
         }
-        
-        
         
         const char* mensaje_char = mensaje.c_str();
         send(new_socket, mensaje_char, mensaje.length(), 0);
@@ -132,6 +131,7 @@ class Server{
     int x=0,y=0;
     cout << "e llegao";
     Enviar(player, cpu);
+
     /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
 
     //Seguira el juego mientras ninguno gane
@@ -188,4 +188,3 @@ int main(){
     
     servidor.CerrarSocket();
     return 0;
-}

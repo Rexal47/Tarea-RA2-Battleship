@@ -41,7 +41,7 @@ int main(){
 	
 	while(!cpu.ganar(false)){
 		cpu.Imprimir(false);
-		cpu.disparo(false);
+		//cpu.disparo(false);
 	}
 	//cpu.Imprimir(true);
 	cpu.Imprimir(false);

@@ -70,7 +70,6 @@ class Server{
         {   
             for (int j = 0; j < 18; j++)
             {
-
                 temp = jug.tRespuestas[i][j];
                 mensaje.append(temp);
             }
@@ -86,7 +85,7 @@ class Server{
                 mensaje.append("000000");
             } 
         }
-        
+
         const char* mensaje_char = mensaje.c_str();
         send(new_socket, mensaje_char, mensaje.length(), 0);
     }
@@ -140,6 +139,7 @@ class Server{
         if(turnoPlayer){
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
             /*ACA RECIBIR X E Y*/
+
             string coord = "1010";
 
             x=atoi(coord.substr(0,2).c_str());
@@ -147,6 +147,7 @@ class Server{
 
             cpu.calcularDisparo(x,y,true);
             turnoPlayer = false;
+          
         }else{
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL CPU + [!]*/
 
@@ -159,6 +160,7 @@ class Server{
 			    y= 2 + rand()%15;
             }
             player.calcularDisparo(x,y,false);
+
             turnoPlayer = true;
         }
 
@@ -190,5 +192,4 @@ int main(){
     
     servidor.CerrarSocket();
     return 0;
-
 }

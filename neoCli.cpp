@@ -244,6 +244,14 @@ int main(){
     cout << cliente.buffer << endl;
     cout << cliente.coordenadas << endl;
 
+    //Recibe tableros de disparos y con sus barcos
+    //cliente.Recibir();
+    //cliente.FormatearTableros();
+
+    //cliente.InputTablero();
+    cliente.Recibir();
+    cliente.FormatearTableros();
+
     //Game Loop
     // while (1)
     // {

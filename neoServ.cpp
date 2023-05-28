@@ -70,7 +70,6 @@ class Server{
         {   
             for (int j = 0; j < 18; j++)
             {
-
                 temp = jug.tRespuestas[i][j];
                 mensaje.append(temp);
             }
@@ -86,7 +85,7 @@ class Server{
                 mensaje.append("000000");
             } 
         }
-        
+
         const char* mensaje_char = mensaje.c_str();
         send(new_socket, mensaje_char, mensaje.length(), 0);
     }
@@ -140,12 +139,15 @@ class Server{
         if(turnoPlayer){
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
             /*ACA RECIBIR X E Y*/
-            string coord;
+
+            string coord = "1010";
 
             x=atoi(coord.substr(0,2).c_str());
             y=atoi(coord.substr(2,2).c_str())+1;
 
             cpu.calcularDisparo(x,y,true);
+            turnoPlayer = false;
+          
         }else{
             /*ENVIAR MENSAJE DE QUE ES TURNO DEL CPU + [!]*/
 
@@ -158,6 +160,8 @@ class Server{
 			    y= 2 + rand()%15;
             }
             player.calcularDisparo(x,y,false);
+
+            turnoPlayer = true;
         }
 
         /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
@@ -176,15 +180,16 @@ int main(){
     servidor.juego();
 
     //Game Loop
-    while (1)
-    {
-        //server indica que es el turno del cliente para disparar
-        //cliente indica coordenadas, las envia
-        //server recibe coordenadas y envia tablero con resultados
-        //cliente indica que es el turno del server para disparar
-        //server indica coordenadas, las envia
-        //cliente recibe coordenadas y envia tablero con resultados
-    }
+    // while (1)
+    // {
+    //     //server indica que es el turno del cliente para disparar
+    //     //cliente indica coordenadas, las envia
+    //     //server recibe coordenadas y envia tablero con resultados
+    //     //cliente indica que es el turno del server para disparar
+    //     //server indica coordenadas, las envia
+    //     //cliente recibe coordenadas y envia tablero con resultados
+    // }
     
     servidor.CerrarSocket();
     return 0;
+}

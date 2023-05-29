@@ -82,10 +82,10 @@ class Server{
         }
 
         //Si el server gana por un jugador que es true, retorna true
-        if(srv.ganar(true) == true){
+        if(srv.ganar(true)){
             mensaje.append("winsrv");
         } else{
-            if(jug.ganar(false) == true){
+            if(jug.ganar(false)){
                 mensaje.append("winjug");
             }else{
                 if(turnoJugador){

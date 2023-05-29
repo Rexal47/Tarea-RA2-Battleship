@@ -248,11 +248,6 @@ int main(){
         msg_server = cliente.buffer;
         msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
     }
-    
-    cliente.FormatearTableros();
-    cliente.InputTablero();
-
-
     //Game Loop
     // while (1)
     // {

@@ -20,6 +20,7 @@ using namespace std;
 
 class Client{
 
+    //Variables a utlizar
     std::string mensaje, temp;
     struct sockaddr_in direccion_server;
     int net_socket, conexion, valread, i, j, k, x, y;
@@ -31,16 +32,16 @@ class Client{
     char buffer[8192] = { 0 };
     std::string coordenadas;
     Tablero tablero;
-    void CrearSocket(){
-        net_socket = socket(AF_INET, SOCK_STREAM, 0);
 
     //inicializacion direccion IP y puerto
-    
+    void CrearSocket(){
+        net_socket = socket(AF_INET, SOCK_STREAM, 0);    
         direccion_server.sin_family = AF_INET;
         direccion_server.sin_addr.s_addr = inet_addr(IP);
         direccion_server.sin_port = htons(PUERTO);
     }
 
+    //Conexion con el servidor
     void Conectar(){
         //inicializar socket
         conexion = connect(net_socket,(struct sockaddr*)&direccion_server,sizeof(direccion_server));
@@ -52,15 +53,18 @@ class Client{
         cout << "CONEXION EXITOSA" << endl;
     }
 
+    //Envia coordenadas de disparo al servidor
     void EnviarCoord(string coordenada){
         const char* mensaje_char = coordenada.c_str();
         send(net_socket, mensaje_char, coordenada.length(), 0);
     }
 
+    //Recibe informacion del servidor
     void Recibir(){
         valread = read(net_socket, buffer, 8192);
     }
 
+    //Se imprime el tablero de disparos y el propio
     void ImprimirTablero(int tablero){
         int k = tablero;
         printf("\n");
@@ -81,20 +85,22 @@ class Client{
         printf("\n        1  2  3  4  5  6  7  8  9  10 11 12 13 14 15\n\n");
     }
 
+    //Le pone la cabecera a cada tablero
     void FormatearTableros(){
         //Primer tablero empieza desde el 0 en buffer
-        cout << "Tablero Disparos" << endl;
+        cout << "Mar enemigo" << endl;
         ImprimirTablero(0);
         //Primer tablero empieza desde el 306 en buffer
-        cout << "Tablero Barcos" << endl;
+        cout << "Tus barcos" << endl;
         ImprimirTablero(306);
     }
 
+    //Cerrar conexion con el servidor
     void CerrarSocket(){
         close(net_socket);
     }
 
-    //input para enviar al servidor
+    //Input para enviar al servidor
     void InputTablero(){
         std::string posicion;
         bool flag = true;
@@ -223,47 +229,49 @@ class Client{
 
 
 int main(){
+    //variables que se utilizan
     string msg_server, msg_control;
-    srand(time(NULL));
+    //Creacion de instancia de cliente y su conexion
     Client cliente;
     cliente.CrearSocket();
     cliente.Conectar();
-    //Recibe tableros de disparos y con sus barcos
 
+    //Recibe tableros de disparos y con sus barcos
     cliente.Recibir();
     msg_server = cliente.buffer;
     cliente.FormatearTableros();
     msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
 
-
+    //Loop de juego principal
     while (msg_control != "winsrv" && msg_control != "winjug")
     {
+        
         //Turno de jugador
         if(msg_control == "111111"){
             cout << "Turno del Jugador" << endl;
             cliente.InputTablero();
             cliente.Recibir();
+            system("clear");
         }else{
             //Turno del CPU
             cout << "Turno del CPU" << endl;
             cliente.Recibir();
             cliente.FormatearTableros();
         }
+        //Se formatea la informacion recibida para que sea leida por el siguiente loop
         msg_server = cliente.buffer;
         msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
     }
-    //Game Loop
-    // while (1)
-    // {
-    //     //server indica que es el turno del cliente para disparar
-    //     //cliente indica coordenadas, las envia
-    //     //server recibe coordenadas y envia tablero con resultados
-    //     //cliente indica que es el turno del server para disparar
-    //     //server indica coordenadas, las envia
-    //     //cliente recibe coordenadas y envia tablero con resultados
-    // }
 
-    //cliente.CerrarSocket();
+    //Mensaje de finalizacion de juego
+    if(msg_control == "winsrv"){
+        cout << "HA GANADO EL CPU..." << endl;
+    }else{
+        cout << "HAS GANADO!" << endl;
+    }
+
+    //Terminar conexion
+    cliente.CerrarSocket();
     return 0;
 
 }

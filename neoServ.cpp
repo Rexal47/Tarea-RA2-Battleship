@@ -30,12 +30,12 @@ class Server{
     char buffer[8192] = { 0 };
 
     public:
-    void CrearSocket(){
+    void CrearSocket(int varPuerto){
         //inicializacion direccion IP y puerto
         server_socket = socket(AF_INET, SOCK_STREAM, 0);
 	    direccion_server.sin_addr.s_addr = INADDR_ANY;
 	    direccion_server.sin_family = AF_INET;
-	    direccion_server.sin_port = htons(PUERTO);
+	    direccion_server.sin_port = htons(varPuerto);
 
         bind(server_socket,(struct sockaddr*)&direccion_server,sizeof(direccion_server));
 
@@ -167,14 +167,31 @@ class Server{
 }
 };
 
-int main(){
+int main(int argc, char *argv[]){
+
+    //lee el puerto
+    if(argv[1] == NULL){
+        printf("ERROR: No ingreso el puerto.\n");
+        return -1;
+    }
+    //verifica que el puerto es numerico
+    string params_puerto = argv[1];
+    for(int i=0; i< params_puerto.length();i++){
+        if(!isdigit(params_puerto[i])){
+            printf("ERROR: Puerto incorrecto.\n");
+            return -1;
+        }
+    }
+
+    //transforma el puerto a numero
+    int puertoValido = atoi(params_puerto.c_str());
 
     //Creacion de instancia servidor
     srand(time(NULL));
     Server servidor;
 
     //Se crea el socket de conexion
-    servidor.CrearSocket();
+    servidor.CrearSocket(puertoValido);
 
     //Se inicia el loop de juego principal
     servidor.juego();

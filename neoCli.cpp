@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+//puerto e IP por defecto
 #define PUERTO 4747
 #define IP "172.28.61.242"
 
@@ -34,11 +35,11 @@ class Client{
     Tablero tablero;
 
     //inicializacion direccion IP y puerto
-    void CrearSocket(){
+    void CrearSocket(string ip_valida, int puerto_valido){
         net_socket = socket(AF_INET, SOCK_STREAM, 0);    
         direccion_server.sin_family = AF_INET;
-        direccion_server.sin_addr.s_addr = inet_addr(IP);
-        direccion_server.sin_port = htons(PUERTO);
+        direccion_server.sin_addr.s_addr = inet_addr(ip_valida.c_str());
+        direccion_server.sin_port = htons(puerto_valido);
     }
 
     //Conexion con el servidor
@@ -164,8 +165,6 @@ class Client{
         }else{
             posicion = posicion + std::to_string(y);
         }
-        cout << coord << "coord" << endl;
-        cout << posicion << "coordenadas" << endl;
         EnviarCoord(posicion);
     }
 
@@ -228,12 +227,49 @@ class Client{
 };
 
 
-int main(){
+int main(int argc, char *argv[]){
+
+    //Valida los parámetros ejecutados al iniciar el comando
+    if (argv[1] == NULL || argv[2] == NULL){
+
+        if(argv[1] == NULL){
+            printf("ERROR: No ingreso la IP.\n");
+        }
+        else {
+            printf("ERROR: No ingreso el puerto.\n");
+        }
+        return -1;
+    }
+
+    string params_ip= argv[1], params_puerto = argv[2];
+    int contador=0, i;
+    //verifica que la ip es numerica
+    for(i=0; i< params_ip.length();i++){
+        if(!isdigit(params_ip[i])){
+            contador++;
+            if(contador>3){
+                printf("ERROR: Puerto incorrecto.\n");
+                return -1;
+            }
+        }
+    }
+
+    //verifica que el puerto es numerico
+    for(i=0; i< params_puerto.length();i++){
+        if(!isdigit(params_puerto[i])){
+            printf("ERROR: Puerto incorrecto.\n");
+            return -1;
+        }
+    }
+    //transforma el puerto a numero
+    int puertoValido = atoi(params_puerto.c_str());
+
+
     //variables que se utilizan
     string msg_server, msg_control;
     //Creacion de instancia de cliente y su conexion
     Client cliente;
-    cliente.CrearSocket();
+    cliente.CrearSocket(params_ip, puertoValido);
     cliente.Conectar();
 
     //Recibe tableros de disparos y con sus barcos
@@ -251,7 +287,6 @@ int main(){
             cout << "Turno del Jugador" << endl;
             cliente.InputTablero();
             cliente.Recibir();
-            system("clear");
         }else{
             //Turno del CPU
             cout << "Turno del CPU" << endl;

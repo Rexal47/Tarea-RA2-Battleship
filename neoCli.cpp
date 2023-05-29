@@ -83,10 +83,10 @@ class Client{
 
     void FormatearTableros(){
         //Primer tablero empieza desde el 0 en buffer
-        cout << "Tablero Disparos" << endl;
+        cout << "Mar enemigo" << endl;
         ImprimirTablero(0);
         //Primer tablero empieza desde el 306 en buffer
-        cout << "Tablero Barcos" << endl;
+        cout << "Tus barcos" << endl;
         ImprimirTablero(306);
     }
 
@@ -238,11 +238,13 @@ int main(){
 
     while (msg_control != "winsrv" && msg_control != "winjug")
     {
+        
         //Turno de jugador
         if(msg_control == "111111"){
             cout << "Turno del Jugador" << endl;
             cliente.InputTablero();
             cliente.Recibir();
+            system("clear");
         }else{
             //Turno del CPU
             cout << "Turno del CPU" << endl;
@@ -252,6 +254,14 @@ int main(){
         msg_server = cliente.buffer;
         msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
     }
+
+
+    if(msg_control == "winsrv"){
+        cout << "HA GANADO EL CPU..." << endl;
+    }else{
+        cout << "HAS GANADO!" << endl;
+    }
+
     //Game Loop
     // while (1)
     // {

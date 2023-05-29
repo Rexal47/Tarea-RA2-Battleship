@@ -127,14 +127,11 @@ class Server{
     int x=0,y=0;
     Enviar(player, cpu, turnoPlayer);
 
-    /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
-
     //Seguira el juego mientras ninguno gane
     while (!cpu.ganar(true) && !player.ganar(false))
     {
         if(turnoPlayer){
-            /*ENVIAR MENSAJE DE QUE ES TURNO DEL JUGADOR*/
-            /*ACA RECIBIR X E Y*/
+		
             Recibir();
             string coord = buffer;
 
@@ -145,8 +142,7 @@ class Server{
             turnoPlayer = false;
           
         }else{
-            /*ENVIAR MENSAJE DE QUE ES TURNO DEL CPU + [!]*/
-
+            
             //Genera un disparo en X,Y
             x= 1 + rand()%15;
 			y= 2 + rand()%15;
@@ -160,8 +156,8 @@ class Server{
             turnoPlayer = true;
         }
 
-        /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
         Enviar(player, cpu, turnoPlayer);
+	sleep(1);
     }
 
 }

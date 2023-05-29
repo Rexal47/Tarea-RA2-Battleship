@@ -128,13 +128,12 @@ class Server{
     //Si es 0 empieza servidor, si es 1, jugador
     if(rand()%2==1){
         turnoPlayer = true;
-        Enviar(player, cpu, true);
     }else{
         turnoPlayer = false;
     }
     //X e Y son las posiciones donde se disparara
     int x=0,y=0;
-    cout << "e llegao";
+    Enviar(player, cpu, turnoPlayer);
 
     /*ACA PONER EL ENVIO DEL TABLERO [~] y [R] +WINS+QUIENGANA*/
 

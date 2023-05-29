@@ -61,7 +61,8 @@ class Server{
         {   
             for (int j = 0; j < 18; j++)
             {
-                temp = srv.tVisible[i][j];
+                //temp = srv.tVisible[i][j];
+                temp = srv.tRespuestas[i][j];
                 mensaje.append(temp);
             }
         }
@@ -145,6 +146,7 @@ class Server{
             /*ACA RECIBIR X E Y*/
             Recibir();
             string coord = buffer;
+            cout << coord << endl;
 
             x=atoi(coord.substr(0,2).c_str());
             y=atoi(coord.substr(2,2).c_str())+1;

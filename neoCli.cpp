@@ -96,6 +96,7 @@ class Client{
 
     //input para enviar al servidor
     void InputTablero(){
+        std::string posicion;
         bool flag = true;
         string coord;
 			//leemos y validamos la coordenada
@@ -146,17 +147,20 @@ class Client{
 					}
 				}
 			}
+        posicion.clear();
         if(x<10){
-            coordenadas = "0" + std::to_string(x);
+            posicion = "0" + std::to_string(x);
         }else{
-            coordenadas = std::to_string(x);
+            posicion = std::to_string(x);
         }
         if(y<10){
-            coordenadas = coordenadas + "0" + std::to_string(y);
+            posicion = posicion + "0" + std::to_string(y);
         }else{
-            coordenadas = coordenadas + std::to_string(y);
+            posicion = posicion + std::to_string(y);
         }
-        EnviarCoord(coord);
+        cout << coord << "coord" << endl;
+        cout << posicion << "coordenadas" << endl;
+        EnviarCoord(posicion);
     }
 
     //Retorna el valor numerico de la letra

@@ -296,6 +296,8 @@ int main(int argc, char *argv[]){
         //Se formatea la informacion recibida para que sea leida por el siguiente loop
         msg_server = cliente.buffer;
         msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
+        cout << msg_control<< endl;
+        sleep(1);
     }
 
     //Mensaje de finalizacion de juego

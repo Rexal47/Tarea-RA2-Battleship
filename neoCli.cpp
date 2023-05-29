@@ -219,7 +219,7 @@ class Client{
 
 
 int main(){
-    
+    string msg_server, msg_control;
     srand(time(NULL));
     Client cliente;
     cliente.CrearSocket();
@@ -227,13 +227,26 @@ int main(){
     //Recibe tableros de disparos y con sus barcos
 
     cliente.Recibir();
+    msg_server = cliente.buffer;
     cliente.FormatearTableros();
-    while (1)
-    {
-        cliente.InputTablero();
-        cliente.Recibir();
-        cliente.FormatearTableros();
+    msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
 
+
+    while (msg_control != "winsrv" && msg_control != "winjug")
+    {
+        //Turno de jugador
+        if(msg_control == "111111"){
+            cout << "Turno del Jugador" << endl;
+            cliente.InputTablero();
+            cliente.Recibir();
+        }else{
+            //Turno del CPU
+            cout << "Turno del CPU" << endl;
+            cliente.Recibir();
+            cliente.FormatearTableros();
+        }
+        msg_server = cliente.buffer;
+        msg_control= msg_server.substr(msg_server.length()-6,6).c_str();
     }
     
     cliente.FormatearTableros();
